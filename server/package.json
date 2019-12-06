@@ -1,0 +1,19 @@
+{
+  "name": "mta-arrival-times-server",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Trent Rand <contact@trentrand.com>",
+  "license": "ISC",
+  "scripts": {
+    "build": "babel src -d dist --source-maps --copy-files",
+    "watch": "npm run build -- --watch",
+    "lint": "eslint src",
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "babel-preset-jest": "^24.9.0",
+    "eslint": "^5.12.0"
+  }
+}
