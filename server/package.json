@@ -4,13 +4,24 @@
   "description": "",
   "author": "Trent Rand <contact@trentrand.com>",
   "license": "ISC",
+  "main": "dist/functions/index.js",
+  "engines": {
+    "node": "10"
+  },
   "scripts": {
     "build": "babel src -d dist --source-maps --copy-files",
     "watch": "npm run build -- --watch",
     "lint": "eslint src",
     "test": "jest",
+    "serve": "npm run watch & firebase serve --only functions,firestore,pubsub",
+    "serve-functions": "npm run watch & firebase serve --only functions",
+    "predeploy": "npm run build",
+    "logs": "firebase functions:log"
   },
   "dependencies": {
+    "firebase-admin": "^8.6.1",
+    "firebase-functions": "^3.3.0",
+    "firebase-functions-test": "^0.1.6",
     "jest": "^24.9.0"
   },
   "devDependencies": {
