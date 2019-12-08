@@ -16,13 +16,15 @@
     "serve": "npm run watch & firebase serve --only functions,firestore,pubsub",
     "serve-functions": "npm run watch & firebase serve --only functions",
     "predeploy": "npm run build",
+    "deploy": "firebase deploy --only functions,firestore,pubsub",
     "logs": "firebase functions:log"
   },
   "dependencies": {
     "firebase-admin": "^8.6.1",
     "firebase-functions": "^3.3.0",
     "firebase-functions-test": "^0.1.6",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "mta-gtfs": "^1.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
