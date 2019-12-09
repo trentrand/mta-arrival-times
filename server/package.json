@@ -11,7 +11,7 @@
   "scripts": {
     "build": "babel src -d dist --source-maps --copy-files --verbose",
     "watch": "npm run build -- --watch",
-    "lint": "eslint src",
+    "lint": "eslint src --fix",
     "test": "jest",
     "serve": "npm run watch & firebase serve --only functions,firestore,pubsub",
     "serve-functions": "npm run watch & firebase serve --only functions",
