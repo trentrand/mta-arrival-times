@@ -9,7 +9,7 @@
     "node": "10"
   },
   "scripts": {
-    "build": "babel src -d dist --source-maps --copy-files",
+    "build": "babel src -d dist --source-maps --copy-files --verbose",
     "watch": "npm run build -- --watch",
     "lint": "eslint src",
     "test": "jest",
