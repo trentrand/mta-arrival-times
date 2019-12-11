@@ -14,6 +14,12 @@
   console.log(feedId, '26');
 ```
 
+### getFeedIdForStationId
+```js
+  const feedId = getFeedIdForStationId('A41');
+  console.log(feedId, '26');
+```
+
 ### getStations
 ```js
   const stations = await getStations();

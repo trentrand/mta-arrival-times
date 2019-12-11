@@ -2,6 +2,13 @@ export function getFeedIdForTrain(name) {
   return FEEDS[name];
 }
 
+export function getFeedIdForStationId(stationId) {
+  if (stationId.startsWith('SIR')) {
+    return FEEDS["SIR"];
+  }
+  return FEEDS[stationId.charAt(0)];
+}
+
 const FEEDS = {
   "_source": "https://datamine.mta.info/list-of-feeds",
   "1": 1,
