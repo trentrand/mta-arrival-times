@@ -2,10 +2,24 @@
 
 ## API
 
-### getScheduleForStation
+### getSchedule
+
+### Get schedules for all trains at Jay st. station
 ```js
-  const w4Schedule = await getScheduleForStation('Jay St', 'A');
-  console.log(JSON.stringify(w4Schedule, null, 2), '{ schedule: { ... } }');
+  const schedules = await getSchedulesForStation('Jay St');
+  console.log(JSON.stringify(schedules, null, 2), '{ A41: { ... }, R29: { ... } }');
+```
+
+### Get schedule for A train at Jay St. station
+```js
+  const schedule = await getSchedules('A41');
+  console.log(JSON.stringify(schedule, null, 2), '{ A41: { ... } }');
+```
+
+### Get schedule for A and R trains at Jay St. station
+```js
+  const schedules = await getSchedules(['A41', 'R29']);
+  console.log(JSON.stringify(schedules, null, 2), '{ A41: { ... }, R29: { ... } }');
 ```
 
 ### getFeedIdForTrain
