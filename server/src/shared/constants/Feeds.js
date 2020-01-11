@@ -1,3 +1,6 @@
+import uniq from 'lodash/uniq';
+import flatten from 'lodash/flatten';
+
 export function getFeedIdForTrain(name) {
   return FEEDS[name];
 }
@@ -9,8 +12,12 @@ export function getFeedIdForStationId(stationId) {
   return FEEDS[stationId.charAt(0)];
 }
 
+export function getUniqueFeedIds() {
+  return uniq(flatten(Object.values(FEEDS)));
+}
+
+// Source: https://datamine.mta.info/list-of-feeds
 const FEEDS = {
-  "_source": "https://datamine.mta.info/list-of-feeds",
   "1": 1,
   "2": 1,
   "3": 1,

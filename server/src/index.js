@@ -1,10 +1,12 @@
 import { getStations } from './api/station';
+import { getAllSchedules, getSchedulesForFeedId } from './api/schedule';
 import { DIRECTIONAL } from './shared/constants/LocationTypes';
 
 (async function() {
+  const db = {};
+
   const stations = await getStations();
 
-  const db = {};
   for (let station of Object.values(stations)) {
     const {
       ['stop_id']: id,
@@ -24,7 +26,21 @@ import { DIRECTIONAL } from './shared/constants/LocationTypes';
       location: {
         latitude: Number(latitude),
         longitude: Number(longitude)
-      }
+      },
+      schedule: []
     };
   }
+
+  const stationSchedules = await getAllSchedules();
+
+  Object.entries(stationSchedules).forEach(([stopId, schedule]) => {
+    if (!db[stopId]) {
+      console.warn('No station exists for stop id', stopId);
+      return;
+    }
+    db[stopId].schedule = schedule;
+  });
+
+  // Print info on A train for Jay St. station
+  console.log(JSON.stringify(db['A41'], null, 2));
 })();

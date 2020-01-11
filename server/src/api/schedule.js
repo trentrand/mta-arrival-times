@@ -1,7 +1,10 @@
 import retry from 'async-retry';
 import api from './MtaApi';
 import { getStationByName } from './station';
-import FEEDS, { getFeedIdForStationId } from '../shared/constants/Feeds';
+import FEEDS, {
+  getFeedIdForStationId,
+  getUniqueFeedIds,
+} from '../shared/constants/Feeds';
 
 export function isValidTrainName(name) {
   return Object.keys(FEEDS).includes(name);
@@ -12,7 +15,25 @@ export async function getSchedulesForStation(stationName, direction) {
   const stationIds = stations.map((station) => station['stop_id']);
 
   return await getSchedules(stationIds, direction);
-};
+}
+
+export async function getAllSchedules() {
+  const feedIds = getUniqueFeedIds();
+  const schedules = await Promise.all(feedIds.map(getSchedulesForFeedId));
+  return Object.assign({}, ...schedules);
+}
+
+export async function getSchedulesForFeedId(feedId) {
+  return await retry(async bail => {
+    const { schedule } = await api.schedulesForFeed(feedId);
+
+    if (schedule === undefined) {
+      throw new Error('Failed to fetch schedule for feed id', feedId);
+    }
+
+    return schedule;
+  });
+}
 
 export async function getSchedules(stationIds, direction) {
   if (Array.isArray(stationIds)) {
