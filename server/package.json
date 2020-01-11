@@ -20,6 +20,7 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
+    "async-retry": "^1.2.3",
     "firebase-admin": "^8.6.1",
     "firebase-functions": "^3.3.0",
     "firebase-functions-test": "^0.1.6",
