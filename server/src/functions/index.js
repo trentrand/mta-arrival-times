@@ -1,6 +1,7 @@
 import admin, { firestore } from 'firebase-admin';
-import { pubsub, auth } from 'firebase-functions';
+import { https, pubsub, auth } from 'firebase-functions';
 import { sleep } from '../shared/utils'
+import { getAllSchedules } from '../api/schedule';
 import { getStations } from '../api/station';
 import { PARENT } from '../shared/constants/LocationTypes';
 import Environments, { getEnvironments } from '../shared/constants/Environments';
@@ -29,7 +30,7 @@ let db = admin.firestore();
 export const cacheStations = pubsub.schedule('every day 00:00').onRun(async (context) => {
   const stations = await getStations();
 
-  let batch = db.batch();
+  // let batch = db.batch();
   for (let station of Object.values(stations)) {
     const {
       ['stop_id']: id,
@@ -45,10 +46,15 @@ export const cacheStations = pubsub.schedule('every day 00:00').onRun(async (con
 
     let docRef = db.collection('stations').doc(id);
     try {
-      docRef.set({
+      // eslint-disable-next-line no-await-in-loop
+      await docRef.set({
         id,
         name,
-        location: new firestore.GeoPoint(Number(latitude), Number(longitude))
+        location: new firestore.GeoPoint(Number(latitude), Number(longitude)),
+        schedule: {
+          N: [],
+          S: [],
+        },
       })
     } catch (error) {
       console.warn(error);
@@ -57,5 +63,21 @@ export const cacheStations = pubsub.schedule('every day 00:00').onRun(async (con
     // TODO: Without this, a quote limit is hit.
     // Find a better way to handle batching with quote-compliant processing.
     await sleep(100); // eslint-disable-line
+  }
+});
+
+export const pollSchedules = pubsub.schedule('every 15 minutes').onRun(async (context) => {
+
+  const stationSchedules = await getAllSchedules();
+
+  for (let [stopId, schedule] of Object.entries(stationSchedules)) {
+    let stationRef = db.collection('stations').doc(stopId);
+
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      await stationRef.set({ schedule }, { merge: true });
+    } catch (error) {
+      console.warn(error);
+    }
   }
 });
