@@ -13,6 +13,7 @@
     "watch": "npm run build -- --watch",
     "lint": "eslint src --fix",
     "test": "jest",
+    "shell": "firebase functions:shell",
     "serve": "npm run watch & firebase serve --only functions,firestore,pubsub",
     "serve-functions": "npm run watch & firebase serve --only functions",
     "predeploy": "npm run build",
