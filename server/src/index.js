@@ -6,7 +6,7 @@ import { DIRECTIONAL } from './shared/constants/LocationTypes';
   const db = {};
 
   const stations = await getStations();
-
+console.log(Object.keys(stations).length)
   for (let station of Object.values(stations)) {
     const {
       ['stop_id']: id,
