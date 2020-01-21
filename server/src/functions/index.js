@@ -8,6 +8,10 @@ import Environments, { getEnvironments } from '../shared/constants/Environments'
 
 const { GeoPoint } = firestore;
 
+const cors = require('cors')({
+  origin: true,
+});
+
 const appConfiguration = {
   databaseURL: "https://mta-arrival-times.firebaseio.com"
 };
@@ -27,6 +31,7 @@ let db = admin.firestore();
 //   console.log(log);
 // });
 
+// Polled cache updates
 export const cacheStations = pubsub.schedule('every day 00:00').onRun(async (context) => {
   const stations = await getStations();
 
@@ -80,4 +85,36 @@ export const pollSchedules = pubsub.schedule('every 15 minutes').onRun(async (co
       console.warn(error);
     }
   }
+});
+
+// Consumer endpoints
+exports.stations = https.onRequest((req, res) => {
+  if (req.method === 'PUT') {
+    return res.status(403).send('Forbidden!');
+  }
+
+  return cors(req, res, () => {
+    db.collection('stations')
+      .get()
+      .then((querySnapshot) => {
+        const stations = {};
+
+        querySnapshot.forEach((doc) => {
+          const stationName = doc.get('name');
+          if (!stations[stationName]) {
+            stations[stationName] = {
+              ids: [],
+              locations: [],
+            };
+          }
+          stations[stationName].ids.push(doc.id);
+          stations[stationName].locations.push(doc.get('location'));
+        });
+
+        return res.status(200).send(stations);
+      })
+      .catch((error) => {
+          console.log("Error getting documents: ", error);
+      });
+  });
 });
