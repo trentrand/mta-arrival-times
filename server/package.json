@@ -26,7 +26,7 @@
     "firebase-functions": "^3.3.0",
     "firebase-functions-test": "^0.1.6",
     "jest": "^24.9.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mta-gtfs": "git+https://github.com/trentrand/mta-gtfs.git"
   },
   "devDependencies": {
